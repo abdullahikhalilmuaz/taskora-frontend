@@ -51,8 +51,7 @@ export default function Reports() {
         endDate: filters.endDate,
       });
       const res = await fetch(
-        (import.meta.env.VITE_API_URL ||
-          "https://taskora-backend-yh4o.onrender.com") +
+        (import.meta.env.VITE_API_URL || "http://localhost:5000") +
           "/api/reports/pdf?" +
           params.toString(),
         {

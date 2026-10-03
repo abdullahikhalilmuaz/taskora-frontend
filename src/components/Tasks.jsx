@@ -28,7 +28,7 @@ const Tasks = ({ user }) => {
         queryParams.append("department", filters.department);
 
       const response = await fetch(
-        `https://taskora-backend-yh4o.onrender.com/api/tasks?${queryParams}`,
+        `http://localhost:5000/api/tasks?${queryParams}`,
         {
           headers: {
             "x-user-email": user.email,

@@ -20,7 +20,7 @@ const TaskDetail = ({ user }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://taskora-backend-yh4o.onrender.com/api/tasks/${taskId}`,
+        `http://localhost:5000/api/tasks/${taskId}`,
         {
           headers: {
             "x-user-email": user.email,
@@ -47,7 +47,7 @@ const TaskDetail = ({ user }) => {
     try {
       setUpdatingStatus(true);
       const response = await fetch(
-        `https://taskora-backend-yh4o.onrender.com/api/tasks/${taskId}/status`,
+        `http://localhost:5000/api/tasks/${taskId}/status`,
         {
           method: "PUT",
           headers: {
@@ -80,7 +80,7 @@ const TaskDetail = ({ user }) => {
     try {
       setSubmitting(true);
       const response = await fetch(
-        `https://taskora-backend-yh4o.onrender.com/api/tasks/${taskId}/comments`,
+        `http://localhost:5000/api/tasks/${taskId}/comments`,
         {
           method: "POST",
           headers: {

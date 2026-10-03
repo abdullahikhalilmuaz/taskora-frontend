@@ -22,14 +22,11 @@ const EmployeeDashboard = ({ user }) => {
   const fetchMyTasks = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "https://taskora-backend-yh4o.onrender.com/api/tasks/my-tasks",
-        {
-          headers: {
-            "x-user-email": user.email,
-          },
+      const response = await fetch("http://localhost:5000/api/tasks/my-tasks", {
+        headers: {
+          "x-user-email": user.email,
         },
-      );
+      });
 
       const data = await response.json();
 

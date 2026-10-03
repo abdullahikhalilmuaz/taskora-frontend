@@ -22,19 +22,16 @@ const Reports = ({ user }) => {
 
   const fetchData = async () => {
     try {
-      const tasksResponse = await fetch(
-        "https://taskora-backend-yh4o.onrender.com/api/tasks",
-        {
-          headers: { "x-user-email": user.email },
-        },
-      );
+      const tasksResponse = await fetch("http://localhost:5000/api/tasks", {
+        headers: { "x-user-email": user.email },
+      });
       const tasksData = await tasksResponse.json();
       if (tasksData.success) {
         setTasks(tasksData.tasks);
       }
 
       const empResponse = await fetch(
-        "https://taskora-backend-yh4o.onrender.com/api/auth/employees",
+        "http://localhost:5000/api/auth/employees",
         {
           headers: { "x-admin-email": user.email },
         },

@@ -7,11 +7,11 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "https://taskora-backend-yh4o.onrender.com",
+        target: "http://localhost:5000",
         changeOrigin: true,
       },
       "/socket.io": {
-        target: "https://taskora-backend-yh4o.onrender.com",
+        target: "http://localhost:5000",
         ws: true,
       },
     },
