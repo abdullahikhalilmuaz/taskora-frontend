@@ -28,7 +28,7 @@ const AdminDashboard = ({ user }) => {
 
       // Fetch employees
       const empResponse = await fetch(
-        "http://localhost:5000/api/auth/employees",
+        "https://taskora-backend-yh4o.onrender.com/api/auth/employees",
         {
           headers: { "x-admin-email": user.email },
         },
@@ -36,9 +36,12 @@ const AdminDashboard = ({ user }) => {
       const empData = await empResponse.json();
 
       // Fetch tasks
-      const tasksResponse = await fetch("http://localhost:5000/api/tasks", {
-        headers: { "x-user-email": user.email },
-      });
+      const tasksResponse = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/tasks",
+        {
+          headers: { "x-user-email": user.email },
+        },
+      );
       const tasksData = await tasksResponse.json();
 
       if (empData.success && tasksData.success) {

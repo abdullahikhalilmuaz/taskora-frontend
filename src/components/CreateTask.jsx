@@ -22,11 +22,14 @@ const CreateTask = ({ user }) => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/employees", {
-        headers: {
-          "x-admin-email": user.email, // Admin can see all, employee might need different
+      const response = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/auth/employees",
+        {
+          headers: {
+            "x-admin-email": user.email, // Admin can see all, employee might need different
+          },
         },
-      });
+      );
       const data = await response.json();
       if (data.success) {
         setEmployees(data.employees);
@@ -48,14 +51,17 @@ const CreateTask = ({ user }) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-email": user.email, // This sends the logged-in user's email
+      const response = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/tasks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-email": user.email, // This sends the logged-in user's email
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       const data = await response.json();
 
