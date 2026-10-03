@@ -1,0 +1,78 @@
+/* iOS-style centered pill toasts */
+.toast-host {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 12000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  padding: 0 16px;
+}
+.toast {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+  max-width: 420px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: rgba(28, 28, 30, 0.92);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 500;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  opacity: 0;
+  transform: translateY(-24px) scale(0.96);
+  transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.toast.show { opacity: 1; transform: translateY(0) scale(1); }
+.toast.out { opacity: 0; transform: translateY(-24px) scale(0.96); }
+.toast i.toast-icon { font-size: 16px; }
+.toast.success i.toast-icon { color: #34d399; }
+.toast.error i.toast-icon { color: #f87171; }
+.toast.info i.toast-icon { color: #60a5fa; }
+.toast.warning i.toast-icon { color: #fbbf24; }
+.toast .toast-msg { flex: 1; }
+
+/* Brand push notification (top-right desktop, top-center mobile) */
+.push-notif {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 13000;
+  width: 340px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  animation: slideInRight 0.4s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
+}
+.push-notif .push-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.push-notif .push-body { flex: 1; min-width: 0; }
+.push-notif .push-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.push-notif .push-text { font-size: 12.5px; color: var(--text-2); line-height: 1.35; }
+.push-notif .push-close {
+  position: absolute; top: 10px; right: 12px;
+  color: var(--text-3); font-size: 14px;
+}
+@media (max-width: 640px) {
+  .push-notif { left: 12px; right: 12px; width: auto; top: 12px; }
+}

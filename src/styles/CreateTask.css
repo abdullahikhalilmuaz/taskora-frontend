@@ -1,0 +1,410 @@
+.create-task-page {
+  min-height: calc(100vh - 140px);
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.create-task-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.create-task-container h2 {
+  color: #2d3748;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+}
+
+.create-task-container h2:after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 15px auto 0;
+  border-radius: 2px;
+}
+
+.create-task-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group label i {
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f7fafc;
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+  border-color: #cbd5e0;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Priority Select Styling */
+.form-group select[name="priority"] {
+  cursor: pointer;
+}
+
+.form-group select[name="priority"] option[value="Low"] {
+  background-color: #48bb78;
+  color: white;
+}
+
+.form-group select[name="priority"] option[value="Medium"] {
+  background-color: #ecc94b;
+  color: #2d3748;
+}
+
+.form-group select[name="priority"] option[value="High"] {
+  background-color: #ed8936;
+  color: white;
+}
+
+.form-group select[name="priority"] option[value="Critical"] {
+  background-color: #f56565;
+  color: white;
+}
+
+/* Department Input Styling */
+.form-group input[name="department"] {
+  background: #ebf4ff;
+  border-color: #90cdf4;
+  color: #2c5282;
+  font-weight: 500;
+}
+
+/* Submit Button */
+.create-task-container button[type="submit"] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.create-task-container button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.create-task-container button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.create-task-container button[type="submit"] i {
+  font-size: 1.2rem;
+}
+
+/* Loading Spinner */
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Employee Select Dropdown Styling */
+.employee-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.employee-option .emp-name {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.employee-option .emp-dept {
+  font-size: 0.85rem;
+  color: #718096;
+  background: #edf2f7;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .create-task-page {
+    padding: 20px 10px;
+  }
+
+  .create-task-container {
+    padding: 25px 20px;
+  }
+
+  .create-task-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .create-task-container button[type="submit"] {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .create-task-container {
+    max-width: 90%;
+    padding: 30px;
+  }
+
+  .form-row {
+    gap: 15px;
+  }
+}
+
+/* Success Message Animation */
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.success-message {
+  background: #48bb78;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  animation: successPulse 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.success-message i {
+  font-size: 1.2rem;
+}
+
+/* Error Message */
+.error-message {
+  background: #f56565;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Required Field Indicator */
+.required::after {
+  content: '*';
+  color: #f56565;
+  margin-left: 4px;
+}
+
+/* Form Footer with Navigation */
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.back-link {
+  color: #718096;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #667eea;
+}
+
+.back-link i {
+  font-size: 0.9rem;
+}
+
+/* Tooltip for Help */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+  color: #a0aec0;
+  cursor: help;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: 200px;
+  background: #2d3748;
+  color: white;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  transition: opacity 0.3s;
+  font-size: 0.85rem;
+  font-weight: normal;
+  pointer-events: none;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #2d3748 transparent transparent transparent;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .create-task-container {
+    background: #1a202c;
+  }
+
+  .create-task-container h2 {
+    color: #f7fafc;
+  }
+
+  .form-group label {
+    color: #cbd5e0;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #f7fafc;
+  }
+
+  .form-group input:hover,
+  .form-group select:hover,
+  .form-group textarea:hover {
+    background: #374151;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    background: #2d3748;
+  }
+
+  .employee-option .emp-name {
+    color: #f7fafc;
+  }
+
+  .employee-option .emp-dept {
+    background: #4a5568;
+    color: #cbd5e0;
+  }
+}

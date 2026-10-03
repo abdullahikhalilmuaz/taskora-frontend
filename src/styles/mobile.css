@@ -1,0 +1,113 @@
+/* Android-app feel on small screens */
+@media (max-width: 900px) {
+  .topbar {
+    padding: 0 12px;
+    gap: 8px;
+    height: 56px;
+  }
+  .topbar-search { display: none; }
+  .topbar-user .info { display: none; }
+  .topbar-user { padding: 4px; }
+  .icon-btn { width: 40px; height: 40px; }
+  .page-body { padding-bottom: calc(var(--mobile-nav-h) + var(--safe-bottom) + 8px); }
+}
+
+/* Android bottom navigation */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: calc(var(--mobile-nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: #fff;
+  border-top: 1px solid var(--border-2);
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
+}
+.mobile-nav-inner {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: var(--mobile-nav-h);
+  align-items: center;
+}
+.mobile-nav-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  color: var(--text-3);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.15s;
+  -webkit-user-select: none; user-select: none;
+}
+.mobile-nav-item i { font-size: 18px; }
+.mobile-nav-item.active { color: var(--primary); }
+.mobile-nav-item.active i { transform: scale(1.08); }
+.mobile-nav-item .nav-dot {
+  position: absolute; top: 4px; right: 22%;
+  min-width: 16px; height: 16px;
+  background: var(--primary); color: #fff;
+  border-radius: 8px;
+  font-size: 9.5px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px;
+  border: 2px solid #fff;
+}
+
+@media (max-width: 900px) { .mobile-nav { display: block; } }
+
+/* Android ripple */
+.ripple { position: relative; overflow: hidden; }
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.15);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+/* Mobile page transition slide-in from right */
+@media (max-width: 900px) {
+  .page-enter { animation: slideInRight 0.25s ease; }
+}
+
+/* On mobile, cards look like android list items */
+@media (max-width: 640px) {
+  .card { border-radius: 14px; }
+  .table th, .table td { padding: 10px 12px; font-size: 12.5px; }
+  .page-title { font-size: 19px; }
+  .page-header { flex-direction: column; align-items: stretch; }
+  .page-header .btn { width: 100%; justify-content: center; }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+.btn:disabled { opacity: 0.65; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(229,57,53,0.25); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+.btn-primary:active:not(:disabled) { transform: scale(0.98); }
+.btn-outline { background: #fff; color: var(--text); border-color: var(--border); }
+.btn-outline:hover:not(:disabled) { background: var(--border-2); }
+.btn-ghost { background: transparent; color: var(--text-2); }
+.btn-ghost:hover:not(:disabled) { background: var(--border-2); color: var(--text); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #dc2626; }
+.btn-sm { padding: 7px 12px; font-size: 12.5px; }
+.btn-block { width: 100%; }
+.btn i.spin { animation: spin 0.8s linear infinite; }
