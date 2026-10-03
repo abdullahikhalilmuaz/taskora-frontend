@@ -1,18 +1,24 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE =
+  import.meta.env.VITE_API_URL || "https://taskora-backend-yh4o.onrender.com";
 
 const getEmail = () => {
   try {
-    const u = JSON.parse(localStorage.getItem('stm_user') || 'null');
-    return u?.email || '';
-  } catch { return ''; }
+    const u = JSON.parse(localStorage.getItem("stm_user") || "null");
+    return u?.email || "";
+  } catch {
+    return "";
+  }
 };
 
-async function request(path, { method = 'GET', body, headers = {}, isForm = false } = {}) {
+async function request(
+  path,
+  { method = "GET", body, headers = {}, isForm = false } = {},
+) {
   const finalHeaders = {
-    'x-user-email': getEmail(),
+    "x-user-email": getEmail(),
     ...headers,
   };
-  if (!isForm && body) finalHeaders['Content-Type'] = 'application/json';
+  if (!isForm && body) finalHeaders["Content-Type"] = "application/json";
 
   const res = await fetch(API_BASE + path, {
     method,
@@ -21,10 +27,10 @@ async function request(path, { method = 'GET', body, headers = {}, isForm = fals
   });
 
   let data = null;
-  const ct = res.headers.get('content-type') || '';
-  if (ct.includes('application/json')) {
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) {
     data = await res.json();
-  } else if (ct.includes('application/pdf')) {
+  } else if (ct.includes("application/pdf")) {
     return { ok: res.ok, blob: await res.blob() };
   }
 
@@ -39,9 +45,9 @@ async function request(path, { method = 'GET', body, headers = {}, isForm = fals
 
 export const api = {
   get: (p) => request(p),
-  post: (p, body) => request(p, { method: 'POST', body }),
-  put: (p, body) => request(p, { method: 'PUT', body }),
-  del: (p) => request(p, { method: 'DELETE' }),
+  post: (p, body) => request(p, { method: "POST", body }),
+  put: (p, body) => request(p, { method: "PUT", body }),
+  del: (p) => request(p, { method: "DELETE" }),
   download: (p) => request(p),
 };
 

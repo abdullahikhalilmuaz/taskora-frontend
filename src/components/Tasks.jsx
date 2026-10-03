@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/Tasks.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "../styles/Tasks.css";
 
 const Tasks = ({ user }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [filters, setFilters] = useState({
-    status: '',
-    priority: '',
-    department: ''
+    status: "",
+    priority: "",
+    department: "",
   });
 
   // Fetch tasks on component mount and when filters change
@@ -22,26 +22,30 @@ const Tasks = ({ user }) => {
       setLoading(true);
       // Build query string from filters
       const queryParams = new URLSearchParams();
-      if (filters.status) queryParams.append('status', filters.status);
-      if (filters.priority) queryParams.append('priority', filters.priority);
-      if (filters.department) queryParams.append('department', filters.department);
+      if (filters.status) queryParams.append("status", filters.status);
+      if (filters.priority) queryParams.append("priority", filters.priority);
+      if (filters.department)
+        queryParams.append("department", filters.department);
 
-      const response = await fetch(`http://localhost:5000/api/tasks?${queryParams}`, {
-        headers: {
-          'x-user-email': user.email
-        }
-      });
-      
+      const response = await fetch(
+        `https://taskora-backend-yh4o.onrender.com/api/tasks?${queryParams}`,
+        {
+          headers: {
+            "x-user-email": user.email,
+          },
+        },
+      );
+
       const data = await response.json();
-      
+
       if (data.success) {
         setTasks(data.tasks);
       } else {
-        setError(data.message || 'Failed to fetch tasks');
+        setError(data.message || "Failed to fetch tasks");
       }
     } catch (err) {
-      console.error('Fetch tasks error:', err);
-      setError('Unable to connect to server');
+      console.error("Fetch tasks error:", err);
+      setError("Unable to connect to server");
     } finally {
       setLoading(false);
     }
@@ -50,20 +54,20 @@ const Tasks = ({ user }) => {
   const handleFilterChange = (e) => {
     setFilters({
       ...filters,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const clearFilters = () => {
     setFilters({
-      status: '',
-      priority: '',
-      department: ''
+      status: "",
+      priority: "",
+      department: "",
     });
   };
 
   const getStatusClass = (status) => {
-    return status.toLowerCase().replace(' ', '-');
+    return status.toLowerCase().replace(" ", "-");
   };
 
   const getPriorityClass = (priority) => {
@@ -71,7 +75,7 @@ const Tasks = ({ user }) => {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -92,7 +96,11 @@ const Tasks = ({ user }) => {
         <div className="filters-grid">
           <div className="filter-group">
             <label>Status</label>
-            <select name="status" value={filters.status} onChange={handleFilterChange}>
+            <select
+              name="status"
+              value={filters.status}
+              onChange={handleFilterChange}
+            >
               <option value="">All Status</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
@@ -104,7 +112,11 @@ const Tasks = ({ user }) => {
 
           <div className="filter-group">
             <label>Priority</label>
-            <select name="priority" value={filters.priority} onChange={handleFilterChange}>
+            <select
+              name="priority"
+              value={filters.priority}
+              onChange={handleFilterChange}
+            >
               <option value="">All Priorities</option>
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
@@ -153,22 +165,30 @@ const Tasks = ({ user }) => {
           </div>
         ) : (
           <div className="tasks-grid">
-            {tasks.map(task => (
-              <Link to={`/task/${task._id}`} key={task._id} className="task-card-link">
+            {tasks.map((task) => (
+              <Link
+                to={`/task/${task._id}`}
+                key={task._id}
+                className="task-card-link"
+              >
                 <div className="task-card">
                   <div className="task-card-header">
                     <h3>{task.title}</h3>
-                    <span className={`priority-badge ${getPriorityClass(task.priority)}`}>
+                    <span
+                      className={`priority-badge ${getPriorityClass(task.priority)}`}
+                    >
                       {task.priority}
                     </span>
                   </div>
-                  
+
                   <p className="task-description">{task.description}</p>
-                  
+
                   <div className="task-meta">
                     <div className="meta-item">
                       <i className="fas fa-user"></i>
-                      <span>Assigned to: {task.assignedTo?.name || 'Unassigned'}</span>
+                      <span>
+                        Assigned to: {task.assignedTo?.name || "Unassigned"}
+                      </span>
                     </div>
                     <div className="meta-item">
                       <i className="fas fa-calendar"></i>
@@ -181,24 +201,30 @@ const Tasks = ({ user }) => {
                   </div>
 
                   <div className="task-card-footer">
-                    <span className={`status-badge ${getStatusClass(task.status)}`}>
+                    <span
+                      className={`status-badge ${getStatusClass(task.status)}`}
+                    >
                       {task.status}
                     </span>
                     <div className="task-stats">
                       <span title="Comments">
-                        <i className="fas fa-comment"></i> {task.comments?.length || 0}
+                        <i className="fas fa-comment"></i>{" "}
+                        {task.comments?.length || 0}
                       </span>
                       <span title="Activities">
-                        <i className="fas fa-history"></i> {task.history?.length || 0}
+                        <i className="fas fa-history"></i>{" "}
+                        {task.history?.length || 0}
                       </span>
                     </div>
                   </div>
 
-                  {task.deadline && new Date(task.deadline) < new Date() && task.status !== 'Completed' && (
-                    <div className="overdue-badge">
-                      <i className="fas fa-exclamation-triangle"></i> Overdue
-                    </div>
-                  )}
+                  {task.deadline &&
+                    new Date(task.deadline) < new Date() &&
+                    task.status !== "Completed" && (
+                      <div className="overdue-badge">
+                        <i className="fas fa-exclamation-triangle"></i> Overdue
+                      </div>
+                    )}
                 </div>
               </Link>
             ))}

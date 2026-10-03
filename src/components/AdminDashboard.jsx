@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/Dashboard.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "../styles/Dashboard.css";
 
 const AdminDashboard = ({ user }) => {
   const [stats, setStats] = useState({
@@ -8,14 +8,14 @@ const AdminDashboard = ({ user }) => {
     totalTasks: 0,
     completedTasks: 0,
     pendingTasks: 0,
-    overdueTasks: 0
+    overdueTasks: 0,
   });
 
   const [employees, setEmployees] = useState([]);
   const [recentTasks, setRecentTasks] = useState([]);
   const [departmentStats, setDepartmentStats] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // Fetch all data
   useEffect(() => {
@@ -25,17 +25,23 @@ const AdminDashboard = ({ user }) => {
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch employees
-      const empResponse = await fetch('http://localhost:5000/api/auth/employees', {
-        headers: { 'x-admin-email': user.email }
-      });
+      const empResponse = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/auth/employees",
+        {
+          headers: { "x-admin-email": user.email },
+        },
+      );
       const empData = await empResponse.json();
-      
+
       // Fetch tasks
-      const tasksResponse = await fetch('http://localhost:5000/api/tasks', {
-        headers: { 'x-user-email': user.email }
-      });
+      const tasksResponse = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/tasks",
+        {
+          headers: { "x-user-email": user.email },
+        },
+      );
       const tasksData = await tasksResponse.json();
 
       if (empData.success && tasksData.success) {
@@ -43,14 +49,18 @@ const AdminDashboard = ({ user }) => {
         const tasks = tasksData.tasks;
 
         setEmployees(employees);
-        
+
         // Calculate stats
         const totalTasks = tasks.length;
-        const completedTasks = tasks.filter(t => t.status === 'Completed').length;
-        const pendingTasks = tasks.filter(t => t.status === 'Pending').length;
-        const inProgressTasks = tasks.filter(t => t.status === 'In Progress').length;
-        const overdueTasks = tasks.filter(t => 
-          new Date(t.deadline) < new Date() && t.status !== 'Completed'
+        const completedTasks = tasks.filter(
+          (t) => t.status === "Completed",
+        ).length;
+        const pendingTasks = tasks.filter((t) => t.status === "Pending").length;
+        const inProgressTasks = tasks.filter(
+          (t) => t.status === "In Progress",
+        ).length;
+        const overdueTasks = tasks.filter(
+          (t) => new Date(t.deadline) < new Date() && t.status !== "Completed",
         ).length;
 
         setStats({
@@ -58,7 +68,7 @@ const AdminDashboard = ({ user }) => {
           totalTasks,
           completedTasks,
           pendingTasks: pendingTasks + inProgressTasks,
-          overdueTasks
+          overdueTasks,
         });
 
         // Get recent tasks (last 5)
@@ -66,14 +76,14 @@ const AdminDashboard = ({ user }) => {
 
         // Calculate department stats
         const deptMap = new Map();
-        tasks.forEach(task => {
+        tasks.forEach((task) => {
           const dept = task.department;
           if (!deptMap.has(dept)) {
             deptMap.set(dept, { tasks: 0, completed: 0 });
           }
           const deptData = deptMap.get(dept);
           deptData.tasks++;
-          if (task.status === 'Completed') {
+          if (task.status === "Completed") {
             deptData.completed++;
           }
         });
@@ -81,21 +91,21 @@ const AdminDashboard = ({ user }) => {
         const deptStats = Array.from(deptMap.entries()).map(([dept, data]) => ({
           department: dept,
           tasks: data.tasks,
-          completed: data.completed
+          completed: data.completed,
         }));
 
         setDepartmentStats(deptStats);
       }
     } catch (err) {
-      console.error('Error fetching data:', err);
-      setError('Failed to load dashboard data');
+      console.error("Error fetching data:", err);
+      setError("Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -113,7 +123,9 @@ const AdminDashboard = ({ user }) => {
       <div className="dashboard-error">
         <i className="fas fa-exclamation-circle"></i>
         <p>{error}</p>
-        <button onClick={fetchAllData} className="btn-retry">Retry</button>
+        <button onClick={fetchAllData} className="btn-retry">
+          Retry
+        </button>
       </div>
     );
   }
@@ -202,27 +214,42 @@ const AdminDashboard = ({ user }) => {
         {/* Recent Tasks */}
         <div className="dashboard-card">
           <div className="card-header">
-            <h3><i className="fas fa-history"></i> Recent Tasks</h3>
-            <Link to="/tasks" className="view-all">View All</Link>
+            <h3>
+              <i className="fas fa-history"></i> Recent Tasks
+            </h3>
+            <Link to="/tasks" className="view-all">
+              View All
+            </Link>
           </div>
           <div className="task-list">
             {recentTasks.length > 0 ? (
-              recentTasks.map(task => (
-                <Link to={`/task/${task._id}`} key={task._id} className="task-item-link">
+              recentTasks.map((task) => (
+                <Link
+                  to={`/task/${task._id}`}
+                  key={task._id}
+                  className="task-item-link"
+                >
                   <div className="task-item">
                     <div className="task-info">
                       <h4>{task.title}</h4>
-                      <p>Assigned to: {task.assignedTo?.name || 'Unassigned'}</p>
+                      <p>
+                        Assigned to: {task.assignedTo?.name || "Unassigned"}
+                      </p>
                     </div>
                     <div className="task-meta">
-                      <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>
+                      <span
+                        className={`status-badge ${task.status.toLowerCase().replace(" ", "-")}`}
+                      >
                         {task.status}
                       </span>
-                      <span className={`priority-badge ${task.priority.toLowerCase()}`}>
+                      <span
+                        className={`priority-badge ${task.priority.toLowerCase()}`}
+                      >
                         {task.priority}
                       </span>
                       <span className="deadline">
-                        <i className="far fa-calendar"></i> {formatDate(task.deadline)}
+                        <i className="far fa-calendar"></i>{" "}
+                        {formatDate(task.deadline)}
                       </span>
                     </div>
                   </div>
@@ -237,13 +264,17 @@ const AdminDashboard = ({ user }) => {
         {/* Employees List */}
         <div className="dashboard-card">
           <div className="card-header">
-            <h3><i className="fas fa-users"></i> Employees</h3>
-            <Link to="/register" className="view-all">Add New</Link>
+            <h3>
+              <i className="fas fa-users"></i> Employees
+            </h3>
+            <Link to="/register" className="view-all">
+              Add New
+            </Link>
           </div>
-          
+
           <div className="employee-list">
             {employees.length > 0 ? (
-              employees.slice(0, 5).map(emp => (
+              employees.slice(0, 5).map((emp) => (
                 <div key={emp._id} className="employee-item">
                   <div className="employee-avatar">
                     <i className="fas fa-user-circle"></i>
@@ -253,12 +284,16 @@ const AdminDashboard = ({ user }) => {
                     <p>
                       <span className="employee-dept">{emp.department}</span>
                       <span className="employee-dot">•</span>
-                      <span className="employee-designation">{emp.designation || 'Staff'}</span>
+                      <span className="employee-designation">
+                        {emp.designation || "Staff"}
+                      </span>
                     </p>
                     <small className="employee-email">{emp.email}</small>
                   </div>
                   <div className="employee-status">
-                    <span className={`status-dot ${emp.isActive ? 'active' : 'inactive'}`}></span>
+                    <span
+                      className={`status-dot ${emp.isActive ? "active" : "inactive"}`}
+                    ></span>
                   </div>
                 </div>
               ))
@@ -272,7 +307,9 @@ const AdminDashboard = ({ user }) => {
       {/* Department Stats */}
       <div className="dashboard-card full-width">
         <div className="card-header">
-          <h3><i className="fas fa-building"></i> Department Overview</h3>
+          <h3>
+            <i className="fas fa-building"></i> Department Overview
+          </h3>
         </div>
         <div className="department-list">
           {departmentStats.length > 0 ? (
@@ -283,14 +320,16 @@ const AdminDashboard = ({ user }) => {
                   <p>Total Tasks: {dept.tasks}</p>
                 </div>
                 <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
+                  <div
+                    className="progress-fill"
                     style={{ width: `${(dept.completed / dept.tasks) * 100}%` }}
                   ></div>
                 </div>
                 <div className="dept-stats">
                   <span>Completed: {dept.completed}</span>
-                  <span>{Math.round((dept.completed / dept.tasks) * 100)}%</span>
+                  <span>
+                    {Math.round((dept.completed / dept.tasks) * 100)}%
+                  </span>
                 </div>
               </div>
             ))

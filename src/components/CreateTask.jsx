@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/CreateTask.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/CreateTask.css";
 
 const CreateTask = ({ user }) => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    assignedTo: '',
-    priority: 'Medium',
-    deadline: '',
-    department: user?.department || ''
+    title: "",
+    description: "",
+    assignedTo: "",
+    priority: "Medium",
+    deadline: "",
+    department: user?.department || "",
   });
 
   // Fetch employees for assignment dropdown
@@ -22,24 +22,27 @@ const CreateTask = ({ user }) => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/employees', {
-        headers: {
-          'x-admin-email': user.email // Admin can see all, employee might need different
-        }
-      });
+      const response = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/auth/employees",
+        {
+          headers: {
+            "x-admin-email": user.email, // Admin can see all, employee might need different
+          },
+        },
+      );
       const data = await response.json();
       if (data.success) {
         setEmployees(data.employees);
       }
     } catch (error) {
-      console.error('Error fetching employees:', error);
+      console.error("Error fetching employees:", error);
     }
   };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -48,26 +51,29 @@ const CreateTask = ({ user }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/tasks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email // This sends the logged-in user's email
+      const response = await fetch(
+        "https://taskora-backend-yh4o.onrender.com/api/tasks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-email": user.email, // This sends the logged-in user's email
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData)
-      });
+      );
 
       const data = await response.json();
 
       if (data.success) {
-        alert('Task created successfully!');
-        navigate('/tasks');
+        alert("Task created successfully!");
+        navigate("/tasks");
       } else {
-        alert(data.message || 'Failed to create task');
+        alert(data.message || "Failed to create task");
       }
     } catch (error) {
-      console.error('Error creating task:', error);
-      alert('Error creating task');
+      console.error("Error creating task:", error);
+      alert("Error creating task");
     } finally {
       setLoading(false);
     }
@@ -109,7 +115,7 @@ const CreateTask = ({ user }) => {
               required
             >
               <option value="">Select Employee</option>
-              {employees.map(emp => (
+              {employees.map((emp) => (
                 <option key={emp._id} value={emp._id}>
                   {emp.name} - {emp.department}
                 </option>
@@ -156,7 +162,7 @@ const CreateTask = ({ user }) => {
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Creating...' : 'Create Task'}
+            {loading ? "Creating..." : "Create Task"}
           </button>
         </form>
       </div>

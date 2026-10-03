@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import '../styles/TaskDetails.css';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import "../styles/TaskDetails.css";
 
 const TaskDetail = ({ user }) => {
   const { taskId } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [comment, setComment] = useState('');
+  const [error, setError] = useState("");
+  const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
@@ -19,22 +19,25 @@ const TaskDetail = ({ user }) => {
   const fetchTaskDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
-        headers: {
-          'x-user-email': user.email
-        }
-      });
-      
+      const response = await fetch(
+        `https://taskora-backend-yh4o.onrender.com/api/tasks/${taskId}`,
+        {
+          headers: {
+            "x-user-email": user.email,
+          },
+        },
+      );
+
       const data = await response.json();
-      
+
       if (data.success) {
         setTask(data.task);
       } else {
-        setError(data.message || 'Failed to fetch task details');
+        setError(data.message || "Failed to fetch task details");
       }
     } catch (err) {
-      console.error('Fetch task error:', err);
-      setError('Unable to connect to server');
+      console.error("Fetch task error:", err);
+      setError("Unable to connect to server");
     } finally {
       setLoading(false);
     }
@@ -43,25 +46,28 @@ const TaskDetail = ({ user }) => {
   const handleStatusChange = async (newStatus) => {
     try {
       setUpdatingStatus(true);
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email
+      const response = await fetch(
+        `https://taskora-backend-yh4o.onrender.com/api/tasks/${taskId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-email": user.email,
+          },
+          body: JSON.stringify({ status: newStatus }),
         },
-        body: JSON.stringify({ status: newStatus })
-      });
+      );
 
       const data = await response.json();
 
       if (data.success) {
         setTask(data.task);
       } else {
-        alert(data.message || 'Failed to update status');
+        alert(data.message || "Failed to update status");
       }
     } catch (err) {
-      console.error('Update status error:', err);
-      alert('Error updating status');
+      console.error("Update status error:", err);
+      alert("Error updating status");
     } finally {
       setUpdatingStatus(false);
     }
@@ -73,45 +79,48 @@ const TaskDetail = ({ user }) => {
 
     try {
       setSubmitting(true);
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-email': user.email
+      const response = await fetch(
+        `https://taskora-backend-yh4o.onrender.com/api/tasks/${taskId}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-email": user.email,
+          },
+          body: JSON.stringify({ text: comment }),
         },
-        body: JSON.stringify({ text: comment })
-      });
+      );
 
       const data = await response.json();
 
       if (data.success) {
-        setComment('');
+        setComment("");
         // Refresh task to get new comment
         fetchTaskDetails();
       } else {
-        alert(data.message || 'Failed to add comment');
+        alert(data.message || "Failed to add comment");
       }
     } catch (err) {
-      console.error('Add comment error:', err);
-      alert('Error adding comment');
+      console.error("Add comment error:", err);
+      alert("Error adding comment");
     } finally {
       setSubmitting(false);
     }
   };
 
   const formatDate = (dateString) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const getStatusClass = (status) => {
-    return status.toLowerCase().replace(' ', '-');
+    return status.toLowerCase().replace(" ", "-");
   };
 
   const getPriorityClass = (priority) => {
@@ -121,7 +130,7 @@ const TaskDetail = ({ user }) => {
   const canEditStatus = () => {
     if (!task || !user) return false;
     return (
-      user.userType === 'admin' ||
+      user.userType === "admin" ||
       task.assignedTo?._id === user.id ||
       task.createdBy?._id === user.id
     );
@@ -141,28 +150,29 @@ const TaskDetail = ({ user }) => {
       <div className="task-detail-error">
         <i className="fas fa-exclamation-circle"></i>
         <h3>Error</h3>
-        <p>{error || 'Task not found'}</p>
-        <button onClick={() => navigate('/tasks')} className="btn-back">
+        <p>{error || "Task not found"}</p>
+        <button onClick={() => navigate("/tasks")} className="btn-back">
           <i className="fas fa-arrow-left"></i> Back to Tasks
         </button>
       </div>
     );
   }
 
-  const isOverdue = new Date(task.deadline) < new Date() && task.status !== 'Completed';
+  const isOverdue =
+    new Date(task.deadline) < new Date() && task.status !== "Completed";
 
   return (
     <div className="task-detail-page">
       <div className="task-detail-container">
         {/* Header with back button */}
         <div className="detail-header">
-          <button onClick={() => navigate('/tasks')} className="btn-back">
+          <button onClick={() => navigate("/tasks")} className="btn-back">
             <i className="fas fa-arrow-left"></i> Back to Tasks
           </button>
           <div className="header-actions">
             {canEditStatus() && (
-              <select 
-                value={task.status} 
+              <select
+                value={task.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 disabled={updatingStatus}
                 className="status-select"
@@ -182,7 +192,9 @@ const TaskDetail = ({ user }) => {
           <div className="task-title-section">
             <h1>{task.title}</h1>
             <div className="task-badges">
-              <span className={`priority-badge ${getPriorityClass(task.priority)}`}>
+              <span
+                className={`priority-badge ${getPriorityClass(task.priority)}`}
+              >
                 {task.priority} Priority
               </span>
               <span className={`status-badge ${getStatusClass(task.status)}`}>
@@ -201,7 +213,7 @@ const TaskDetail = ({ user }) => {
               <i className="fas fa-user"></i>
               <div>
                 <label>Created By</label>
-                <p>{task.createdBy?.name || 'Unknown'}</p>
+                <p>{task.createdBy?.name || "Unknown"}</p>
                 <small>{task.createdBy?.email}</small>
               </div>
             </div>
@@ -210,7 +222,7 @@ const TaskDetail = ({ user }) => {
               <i className="fas fa-user-check"></i>
               <div>
                 <label>Assigned To</label>
-                <p>{task.assignedTo?.name || 'Unassigned'}</p>
+                <p>{task.assignedTo?.name || "Unassigned"}</p>
                 <small>{task.assignedTo?.email}</small>
               </div>
             </div>
@@ -219,9 +231,9 @@ const TaskDetail = ({ user }) => {
               <i className="fas fa-calendar"></i>
               <div>
                 <label>Deadline</label>
-                <p className={isOverdue ? 'text-danger' : ''}>
+                <p className={isOverdue ? "text-danger" : ""}>
                   {formatDate(task.deadline)}
-                  {isOverdue && ' (Overdue)'}
+                  {isOverdue && " (Overdue)"}
                 </p>
               </div>
             </div>
@@ -246,7 +258,9 @@ const TaskDetail = ({ user }) => {
           </div>
 
           <div className="task-description-section">
-            <h3><i className="fas fa-align-left"></i> Description</h3>
+            <h3>
+              <i className="fas fa-align-left"></i> Description
+            </h3>
             <p>{task.description}</p>
           </div>
         </div>
@@ -256,7 +270,7 @@ const TaskDetail = ({ user }) => {
           {/* Comments Section */}
           <div className="comments-section">
             <h3>
-              <i className="fas fa-comments"></i> 
+              <i className="fas fa-comments"></i>
               Comments ({task.comments?.length || 0})
             </h3>
 
@@ -292,13 +306,17 @@ const TaskDetail = ({ user }) => {
                         <i className="fas fa-user-circle"></i>
                         <strong>{comment.userName}</strong>
                       </div>
-                      <span className="comment-date">{formatDate(comment.createdAt)}</span>
+                      <span className="comment-date">
+                        {formatDate(comment.createdAt)}
+                      </span>
                     </div>
                     <p className="comment-text">{comment.text}</p>
                   </div>
                 ))
               ) : (
-                <p className="no-comments">No comments yet. Be the first to comment!</p>
+                <p className="no-comments">
+                  No comments yet. Be the first to comment!
+                </p>
               )}
             </div>
           </div>
@@ -306,7 +324,7 @@ const TaskDetail = ({ user }) => {
           {/* Activity History Section */}
           <div className="history-section">
             <h3>
-              <i className="fas fa-history"></i> 
+              <i className="fas fa-history"></i>
               Activity History
             </h3>
             <div className="history-list">
@@ -314,24 +332,45 @@ const TaskDetail = ({ user }) => {
                 task.history.map((item, index) => (
                   <div key={index} className="history-item">
                     <div className="history-icon">
-                      {item.action === 'created' && <i className="fas fa-plus-circle"></i>}
-                      {item.action === 'status_changed' && <i className="fas fa-sync-alt"></i>}
-                      {item.action === 'commented' && <i className="fas fa-comment"></i>}
-                      {item.action === 'assigned' && <i className="fas fa-user-plus"></i>}
-                      {item.action === 'updated' && <i className="fas fa-edit"></i>}
+                      {item.action === "created" && (
+                        <i className="fas fa-plus-circle"></i>
+                      )}
+                      {item.action === "status_changed" && (
+                        <i className="fas fa-sync-alt"></i>
+                      )}
+                      {item.action === "commented" && (
+                        <i className="fas fa-comment"></i>
+                      )}
+                      {item.action === "assigned" && (
+                        <i className="fas fa-user-plus"></i>
+                      )}
+                      {item.action === "updated" && (
+                        <i className="fas fa-edit"></i>
+                      )}
                     </div>
                     <div className="history-content">
                       <p>
                         <strong>{item.userName}</strong>
-                        {item.action === 'created' && ' created this task'}
-                        {item.action === 'status_changed' && (
-                          <> changed status from <span className="old-value">{item.oldValue}</span> to <span className="new-value">{item.newValue}</span></>
+                        {item.action === "created" && " created this task"}
+                        {item.action === "status_changed" && (
+                          <>
+                            {" "}
+                            changed status from{" "}
+                            <span className="old-value">
+                              {item.oldValue}
+                            </span>{" "}
+                            to{" "}
+                            <span className="new-value">{item.newValue}</span>
+                          </>
                         )}
-                        {item.action === 'commented' && ' added a comment'}
-                        {item.action === 'assigned' && ` assigned task to ${item.newValue}`}
-                        {item.action === 'updated' && ' updated the task'}
+                        {item.action === "commented" && " added a comment"}
+                        {item.action === "assigned" &&
+                          ` assigned task to ${item.newValue}`}
+                        {item.action === "updated" && " updated the task"}
                       </p>
-                      <span className="history-date">{formatDate(item.timestamp)}</span>
+                      <span className="history-date">
+                        {formatDate(item.timestamp)}
+                      </span>
                     </div>
                   </div>
                 ))
