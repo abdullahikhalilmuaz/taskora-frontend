@@ -6,6 +6,7 @@ import { initials } from '../../utils/formatDate.js';
 const nav = [
   { to: '/dashboard', label: 'Dashboard', icon: 'fa-house' },
   { to: '/tasks', label: 'Tasks', icon: 'fa-list-check' },
+  { to: '/personal-tasks', label: 'My Tasks', icon: 'fa-user-check' },   // ← NEW
   { to: '/notifications', label: 'Notifications', icon: 'fa-bell', badge: true },
   { to: '/reports', label: 'Reports', icon: 'fa-chart-pie', admin: true },
   { to: '/employees', label: 'Employees', icon: 'fa-users', admin: true },

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../../context/SocketContext.jsx";
+import { api } from "../../utils/api.js";
 import { fmtTimeAgo } from "../../utils/formatDate.js";
 
 const iconFor = (type) =>
@@ -21,7 +22,12 @@ export default function NotificationPanel({ onClose }) {
   const { notifications, setNotifications } = useSocket();
   const nav = useNavigate();
 
-  const open = (n) => {
+  const open = async (n) => {
+    if (!n.read) {
+      try {
+        await api.put("/api/notifications/" + n._id + "/read");
+      } catch {}
+    }
     setNotifications((prev) =>
       prev.map((x) => (x._id === n._id ? { ...x, read: true } : x)),
     );
@@ -30,8 +36,12 @@ export default function NotificationPanel({ onClose }) {
     else nav("/notifications");
   };
 
-  const markAll = () =>
-    setNotifications((prev) => prev.map((x) => ({ ...x, read: true })));
+  const markAll = async () => {
+    try {
+      await api.put("/api/notifications/mark-all/read");
+      setNotifications((prev) => prev.map((x) => ({ ...x, read: true })));
+    } catch {}
+  };
 
   return (
     <div className="dropdown-menu" style={{ width: 340, padding: 0 }}>
